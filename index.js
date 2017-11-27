@@ -70,8 +70,7 @@ If no number is givin or is not a number, returns the first element of the <arra
 @return: {array}: array containing the first <number> of elements from param <array>
 */
 function first(array, number){
-    var newArray = [];
-    if(!Array.isArray(array)){
+     if(!Array.isArray(array)){
         return [];
     }
     if(number === undefined || isNaN(number)){
@@ -80,6 +79,7 @@ function first(array, number){
     if(number > array.length){
         return array;
     }else if(number > 0){
+        let newArray = [];
         for(let i = 0; i < number; i++){
             newArray.push(array[i]);
         }
@@ -89,6 +89,7 @@ function first(array, number){
     }
     
 }
+
 module.exports.first = first;
 
 
@@ -155,24 +156,25 @@ If found, it returns the first address of the value in the array. If not found, 
 @return {number} index of first element in <array> that matches <value> or -1 if not found
 */
 function indexOf(array, value){
-    // for(let i = 0; i < array.length; i++){
-    //     if(array[i] === value){
-    //         return i;
-    //     }
-    // }
-    // return -1;
-    
-    var indexHolder = [];
-    each(array, function(element, i, collection){
-        if(element === value){
-            indexHolder.push(i);
+    //below I used a for loop as per NEW instructions given to me
+    for(let i = 0; i < array.length; i++){
+        if(array[i] === value){
+            return i;
         }
-    })
-    if(indexHolder.length === 0){
-        return -1;
-    }else{
-        return indexHolder[0];
     }
+    return -1;
+    //below I used HOF as per OLD instructions that were originall given me
+    // var indexHolder = [];
+    // each(array, function(element, i, collection){
+    //     if(element === value){
+    //         indexHolder.push(i);
+    //     }
+    // })
+    // if(indexHolder.length === 0){
+    //     return -1;
+    // }else{
+    //     return indexHolder[0];
+    // }
 }
 
 module.exports.indexOf = indexOf;
@@ -395,34 +397,10 @@ reduce: takes an array, action, and seed. It iterates through the array calling 
 @param: {many possible data types} seed: optional start point for reduce
 @return: {many possible data types}, returned from the final call of <action> upon completion of the iteration
 */
-function reduce(array, action, seed){
-  var iteration = 0;
-    var givenSeed;
-    var prev;
-   
-    if(seed !== undefined){
-        prev = seed;
-        givenSeed = true;
-    }else if(Array.isArray(array)){
-        prev = array[0];
-        givenSeed = false;
-    }else if(typeof array === "object"){
-        prev = array[Object.keys(array)[0]]
-        givenSeed = false;
-    }
-    console.log("start prev is: ", prev);
-    each(array, function(value, address, newArray){
-       
-        if(givenSeed === true){
-            prev = action(prev, value, address);
-        }else{
-            if(iteration > 0){
-                prev = action(prev, value, address);
-            }
-            iteration++;
-        }
-    })
-      return prev;
+var reduce = (coll, action, seed) => {
+    each(coll, (e, i, a) => seed = seed !== undefined  ? action(seed, e, i, a) : e);
+    return seed;
+  
 }
 
 module.exports.reduce = reduce;
@@ -445,4 +423,7 @@ function extend(objOne, objTwo){
     })
     return mainObj;
 }
+
 module.exports.extend = extend;
+return;
+
